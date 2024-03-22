@@ -10,12 +10,8 @@
 -- ----------------
 --          373501
 -- (1 row)
-
-
 SELECT SUM(assignment_submissions.duration) AS Total_Cohort_Duration
 FROM assignment_submissions
-JOIN students
-  ON students.id = assignment_submissions.student_id
-JOIN cohorts
-  ON students.cohort_id = cohorts.id
+  JOIN students ON students.id = assignment_submissions.student_id
+  JOIN cohorts ON students.cohort_id = cohorts.id
 WHERE cohorts.name = 'FEB12';
