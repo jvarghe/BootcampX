@@ -1,7 +1,7 @@
 const { Pool } = require("pg");
 
 
-// CONNECT TO THE DATABASE
+// CONNECTING TO THE DATABASE
 const pool = new Pool({
   user: "development",
   password: "development",
@@ -10,15 +10,18 @@ const pool = new Pool({
 });
 
 
+// PROCESSING ARGUMENTS PASSED IN THROUGH THE CLI
+
+const cohort = process.argv[2];
+const limit = process.argv[3];
+
+
 // QUERIES
+// Define queries here:
 
-// `pool.query` is a function that accepts an SQL query as a JavaScript string.
-// Using the ` (backtick), we can write a multi line string like this to make
-// our SQL look nicer. The function then returns a promise that contains our
-// result when the query is successful.
-pool.query(
-
-  // Query the `students` & `cohorts` tables:
+// Query the `students` & `cohorts` tables without the user passing in any
+// arguments.
+const query1 =
   `
   SELECT
         students.id,
@@ -27,24 +30,50 @@ pool.query(
         cohorts.name AS cohort_name
   FROM students
     JOIN cohorts ON cohorts.id = students.cohort_id
-  LIMIT 50;
+  LIMIT 5;
   `
+  ;
 
-// Records are being returned from the database, but with one important
-// note: the data is returned as an array of JavaScript objects. The `pg`
-// package and others handle the conversion of data from the database to
-// JavaScript.
+
+// Query the `students` & `cohorts` tables with user-specified values for
+// cohort and the limit.
+const query2 =
+  `
+  SELECT
+  students.id,
+  students.name,
+  students.cohort_id,
+  cohorts.name AS cohort_name
+  FROM students
+    JOIN cohorts ON cohorts.id = students.cohort_id
+  WHERE cohorts.name LIKE '%${cohort}%'
+  LIMIT ${limit};
+  `
+  ;
+
+
+// QUERY THE DATABASE
+
+// `pool.query` is a function that accepts an SQL query as a JavaScript string.
+// Using the ` (backtick), we can write a multi line string like this to make
+// our SQL look nicer. The function then returns a promise that contains our
+// result when the query is successful.
+pool.query(query2
+
+  // Records are being returned from the database, but with one important
+  // note: the data is returned as an array of JavaScript objects. The `pg`
+  // package and others handle the conversion of data from the database to
+  // JavaScript.
 ).then((result) => {
 
-    // Print out records as JS objects in the terminal.
-    // console.log(result.rows);
+  // Print out records as JS objects in the terminal.
+  // console.log(result.rows);
 
 
-    // Format and print out student and cohort information.
-    result.rows.forEach(student => {
-      console.log(`${student.name} has an ID of ${student.id} and is in the ${student.cohort_name} cohort.`);
-    });
+  // Query 1 & 2: Format and print out student and cohort information.
+  result.rows.forEach(student => {
+    console.log(`${student.name} has an ID of ${student.id} and is in the ${student.cohort_name} cohort.`);
+  });
 
-
-  })
+})
   .catch((errorObj) => console.error("Query had an error:", errorObj.stack));
