@@ -11,7 +11,6 @@ const pool = new Pool({
 
 
 // PROCESSING ARGUMENTS PASSED IN THROUGH THE CLI
-
 const cohort = process.argv[2];
 // The `|| 5` is a fallback value. If `process.argv[3]` is not provided (or is
 // falsy, such as undefined), then the value `5` will be used as the default
@@ -27,10 +26,10 @@ const limit = process.argv[3] || 5;
 const query1 =
   `
   SELECT
-        students.id,
-        students.name,
-        students.cohort_id,
-        cohorts.name AS cohort_name
+    students.id,
+    students.name,
+    students.cohort_id,
+    cohorts.name AS cohort_name
   FROM students
     JOIN cohorts ON cohorts.id = students.cohort_id
   LIMIT 5;
@@ -43,10 +42,10 @@ const query1 =
 const query2 =
   `
   SELECT
-  students.id,
-  students.name,
-  students.cohort_id,
-  cohorts.name AS cohort_name
+    students.id,
+    students.name,
+    students.cohort_id,
+    cohorts.name AS cohort_name
   FROM students
     JOIN cohorts ON cohorts.id = students.cohort_id
   WHERE cohorts.name LIKE '%${cohort}%'
