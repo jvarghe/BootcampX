@@ -43,5 +43,6 @@ pool.query(query1)
       console.log(`${teacher.cohort}: ${teacher.teacher}`);
     });
 
+    pool.end();
   })
   .catch((errorObj) => console.error("Query had an error:", errorObj.stack));

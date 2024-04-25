@@ -95,5 +95,7 @@ pool.query(query2, inputValues)
       console.log(`${student.name} has an ID of ${student.id} and is in the ${student.cohort_name} cohort.`);
     });
 
+    // Disconnect from the database.
+    pool.end();
   })
   .catch((errorObj) => console.error("Query had an error:", errorObj.stack));
