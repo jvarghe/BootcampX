@@ -13,7 +13,10 @@ const pool = new Pool({
 // PROCESSING ARGUMENTS PASSED IN THROUGH THE CLI
 
 const cohort = process.argv[2];
-const limit = process.argv[3];
+// The `|| 5` is a fallback value. If `process.argv[3]` is not provided (or is
+// falsy, such as undefined), then the value `5` will be used as the default
+// limit.
+const limit = process.argv[3] || 5;
 
 
 // QUERIES
